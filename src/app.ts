@@ -7,11 +7,11 @@ const app = express();
 
 const front1 = `${process.env.FRONT_DEPLOY}`
 console.log('front1', front1)
-const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app/'];
+const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app'];
 
 // const cors = require('cors');
 const corsOptions = {
-    origin: 'https://golden-seahorse-94ed53.netlify.app/',
+    origin: allowedOrigins,
     credentials: true,            //access-control-allow-credentials:true
     optionSuccessStatus: 200
 }
