@@ -60,6 +60,6 @@ app.delete('/product', (req, res) => {
     }
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     return console.log(`Server running on 3000`);
 });
