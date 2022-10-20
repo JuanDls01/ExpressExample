@@ -10,7 +10,7 @@ console.log('front1', front1)
 const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app/'];
 
 const options: cors.CorsOptions = {
-    origin: allowedOrigins
+    origin: 'https://golden-seahorse-94ed53.netlify.app/'
 };
 
 // Then pass these options to cors:
