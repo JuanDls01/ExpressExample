@@ -5,7 +5,8 @@ import cors from 'cors';
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000', process.env.FRONT_DEPLOY];
+const front1 = process.env.FRONT_DEPLOY
+const allowedOrigins = ['http://localhost:3000', front1];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins
