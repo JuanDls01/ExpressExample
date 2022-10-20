@@ -5,8 +5,9 @@ import cors from 'cors';
 
 const app = express();
 
-const front1 = process.env.FRONT_DEPLOY
-const allowedOrigins = ['http://localhost:3000', front1];
+const front1 = `${process.env.FRONT_DEPLOY}`
+console.log('front1', front1)
+const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app/'];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins
