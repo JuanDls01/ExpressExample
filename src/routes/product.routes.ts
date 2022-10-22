@@ -24,7 +24,7 @@ productRoute.post('/', (req, res) => {
     try {
         if (!name || !marca) throw new Error("che no me pasaste todos los datos");
         productList.push({ id: new Date().getTime(), name, marca })
-        res.status(200).json(productList.slice(-1));
+        res.status(200).json(productList.slice(-1)[0]);
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
