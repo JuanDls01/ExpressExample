@@ -43,11 +43,11 @@ productRoute.put('/', (req, res) => {
     }
 })
 
-productRoute.delete('/', (req, res) => {
-    const { id } = req.body;
+productRoute.delete('/:id', (req, res) => {
+    const { id } = req.params;
     try {
         if (!id) throw new Error("che no me pasaste ningún id");
-        const index = productList.findIndex((product) => product.id === id);
+        const index = productList.findIndex((product) => product.id === Number(id.split('')[1]));
         if (index === -1) throw new Error("No se encontro ningún producto con el id suministrado");
         const productDeleted = productList.splice(index, 1)
         res.status(200).json(productDeleted)
