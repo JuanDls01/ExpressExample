@@ -45,11 +45,14 @@ productRoute.put('/', (req, res) => {
 
 productRoute.delete('/:id', (req, res) => {
     const { id } = req.params;
+    console.log(id.split(':')[1])
     try {
         if (!id) throw new Error("che no me pasaste ningún id");
-        const index = productList.findIndex((product) => product.id === Number(id.split('')[1]));
+        const index = productList.findIndex((product) => product.id === Number(id.split(':')[1]));
+        console.log(index)
         if (index === -1) throw new Error("No se encontro ningún producto con el id suministrado");
-        const productDeleted = productList.splice(index, 1)
+        const productDeleted = productList.splice(index, 1)[0]
+        console.log(productDeleted)
         res.status(200).json(productDeleted)
     } catch (err) {
         res.status(400).json({ message: err.message })
