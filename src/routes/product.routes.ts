@@ -36,7 +36,13 @@ productRoute.put('/', (req, res) => {
         if (!name && !marca) throw new Error("che no me pasaste ningún parametro para modificar");
         const index = productList.findIndex((product) => product.id === id);
         if (index === -1) throw new Error("No se encontro ningún producto con el id suministrado");
-        productList[index] = { ...productList[index], name, marca }
+
+        if (marca) {
+            productList[index].marca = marca;
+        }
+        if (name) {
+            productList[index].name = name;
+        }
         res.status(200).json(productList[index]);
     } catch (err) {
         res.status(400).json({ message: err.message })
