@@ -19,11 +19,22 @@ const productList: ProductList = [
     },
     {
         id: 3, name: 'Iphone 13', brand: 'Apple', price: 1200
+    },
+    {
+        id: 4, name: 'Mouse G304', brand: 'Logitech', price: 200
+    },
+    {
+        id: 5, name: 'Teclado mecanico', brand: 'Hyperx', price: 350
+    },
+    {
+        id: 6, name: 'Auriculares gamer', brand: 'Logitech', price: 300
     }
 ]
 
-productRoute.get('/', (req, res) => {
-    res.status(200).json(productList);
+productRoute.get('/:currentPage', (req, res) => {
+    const { currentPage } = req.params;
+
+    res.status(200).json(productList.slice(Number(currentPage) * 4 - 4, Number(currentPage) * 4));
 })
 
 productRoute.post('/', (req, res) => {
