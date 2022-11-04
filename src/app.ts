@@ -5,7 +5,7 @@ import cors from 'cors';
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app'];
+const allowedOrigins = ['http://localhost:3000', 'https://golden-seahorse-94ed53.netlify.app', 'https://productmanagement.vercel.app'];
 
 const corsOptions = {
     origin: allowedOrigins,

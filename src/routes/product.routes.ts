@@ -4,26 +4,33 @@ const productRoute = Router();
 type ProductType = {
     id: number,
     name: string,
-    marca: string,
+    brand: string,
+    price: number,
 }
 
 type ProductList = ProductType[]
 
-const productList: ProductList = [{
-    id: 1,
-    name: "chocolate",
-    marca: "chevrolet"
-}]
+const productList: ProductList = [
+    {
+        id: 1, name: "chocolate", brand: "chevrolet", price: 50
+    },
+    {
+        id: 2, name: 'gaseosa cola', brand: 'coca cola', price: 5
+    },
+    {
+        id: 3, name: 'Iphone 13', brand: 'Apple', price: 1200
+    }
+]
 
 productRoute.get('/', (req, res) => {
     res.status(200).json(productList);
 })
 
 productRoute.post('/', (req, res) => {
-    const { name, marca } = req.body;
+    const { name, brand, price } = req.body;
     try {
-        if (!name || !marca) throw new Error("che no me pasaste todos los datos");
-        productList.push({ id: new Date().getTime(), name, marca })
+        if (!name || !brand || !price) throw new Error("Por favor provea todos los datos del productos");
+        productList.push({ id: new Date().getTime(), name, brand, price })
         res.status(200).json(productList.slice(-1)[0]);
     } catch (err) {
         res.status(400).json({ message: err.message })
@@ -31,14 +38,14 @@ productRoute.post('/', (req, res) => {
 })
 
 productRoute.put('/', (req, res) => {
-    const { id, name, marca } = req.body;
+    const { id, name, brand, price } = req.body;
     try {
-        if (!name && !marca) throw new Error("che no me pasaste ningún parametro para modificar");
+        if (!name && !brand && !price) throw new Error("Por favor provea algún parametro para modificar");
         const index = productList.findIndex((product) => product.id === id);
-        if (index === -1) throw new Error("No se encontro ningún producto con el id suministrado");
+        if (index === -1) throw new Error("El producto suministrado no ha sido encontrado");
 
-        if (marca) {
-            productList[index].marca = marca;
+        if (brand) {
+            productList[index].brand = brand;
         }
         if (name) {
             productList[index].name = name;
@@ -51,12 +58,10 @@ productRoute.put('/', (req, res) => {
 
 productRoute.delete('/:id', (req, res) => {
     const { id } = req.params;
-    console.log(id.split(':')[1])
     try {
-        if (!id) throw new Error("che no me pasaste ningún id");
+        if (!id) throw new Error("Por favor provea un producto para eliminar");
         const index = productList.findIndex((product) => product.id === Number(id.split(':')[1]));
-        console.log(index)
-        if (index === -1) throw new Error("No se encontro ningún producto con el id suministrado");
+        if (index === -1) throw new Error("El producto solicitado para eliminar no ha sido encontrado");
         const productDeleted = productList.splice(index, 1)[0]
         console.log(productDeleted)
         res.status(200).json(productDeleted)
