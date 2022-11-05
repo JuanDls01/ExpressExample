@@ -34,7 +34,7 @@ const productList: ProductList = [
 productRoute.get('/:currentPage', (req, res) => {
     const { currentPage } = req.params;
 
-    res.status(200).json(productList.slice(Number(currentPage) * 4 - 4, Number(currentPage) * 4));
+    res.status(200).json({ products: productList.slice(Number(currentPage) * 4 - 4, Number(currentPage) * 4), pages: Math.ceil(productList.length / 4) });
 })
 
 productRoute.post('/', (req, res) => {
