@@ -1,11 +1,12 @@
 import { Router } from 'express';
+import { filterByBrand, filterByName, filterByPrice } from '../utils/filterByParam';
 const productRoute = Router();
 
-type ProductType = {
+export type ProductType = {
     id: number,
     name: string,
     brand: string,
-    price: number,
+    price: number
 }
 
 type ProductList = ProductType[]
@@ -33,8 +34,28 @@ const productList: ProductList = [
 
 productRoute.get('/:currentPage', (req, res) => {
     const { currentPage } = req.params;
-
+    console.log('este')
     res.status(200).json({ products: productList.slice(Number(currentPage) * 4 - 4, Number(currentPage) * 4), pages: Math.ceil(productList.length / 4) });
+})
+
+productRoute.get('/search/info', (req, res) => {
+    const { name, brand, price } = req.query;
+    try {
+        if (!name && !brand && !price) throw new Error('Por favor provea alguna información para buscar')
+        let productsFinded: ProductList;
+        if (name) {
+            productsFinded = filterByName(name.toString(), productList)
+        } else if (brand) {
+            productsFinded = filterByBrand(brand.toString(), productList)
+        } else {
+            productsFinded = filterByPrice(Number(price), productList)
+        }
+
+        if (productsFinded.length === 0) throw new Error('No se encontraron productos')
+        return res.status(200).json(productsFinded)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
 })
 
 productRoute.post('/', (req, res) => {
