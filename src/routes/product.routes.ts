@@ -38,8 +38,6 @@ const productList: ProductList = [
 productRoute.get('/:prodPerPage/:currentPage', (req, res) => {
     const { prodPerPage, currentPage } = req.params as { currentPage: string, prodPerPage: string };
     const { name, brand, price } = req.query as { name?: string, brand?: string, price?: number };
-    // let currentPage = query?.currentPage ? query.currentPage : 1
-    // let prodPerPage = query?.prodPerPage ? query.prodPerPage : 5
     try {
 
         let products: ProductList;
