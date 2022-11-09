@@ -36,10 +36,10 @@ const productList: ProductList = [
 ]
 
 productRoute.get('/:prodPerPage/:currentPage', (req, res) => {
-    const query = req.params as { currentPage: string, prodPerPage: string };
+    const { prodPerPage, currentPage } = req.params as { currentPage: string, prodPerPage: string };
     const { name, brand, price } = req.query as { name?: string, brand?: string, price?: number };
-    let currentPage = query?.currentPage ? query.currentPage : 1
-    let prodPerPage = query?.prodPerPage ? query.prodPerPage : 5
+    // let currentPage = query?.currentPage ? query.currentPage : 1
+    // let prodPerPage = query?.prodPerPage ? query.prodPerPage : 5
     try {
 
         let products: ProductList;
@@ -82,18 +82,16 @@ productRoute.post('/', (req, res) => {
 })
 
 productRoute.put('/', (req, res) => {
-    const { id, name, brand, price } = req.body;
+    const { id, name, brand, price } = req.body as { id: number, name: string, brand: string, price: number };
     try {
         if (!name && !brand && !price) throw new Error("Por favor provea algún parametro para modificar");
         const index = productList.findIndex((product) => product.id === id);
         if (index === -1) throw new Error("El producto suministrado no ha sido encontrado");
 
-        if (brand) {
-            productList[index].brand = brand;
-        }
-        if (name) {
-            productList[index].name = name;
-        }
+        if (name) productList[index].name = name;
+        if (brand) productList[index].brand = brand;
+        if (price) productList[index].price = price;
+
         res.status(200).json(productList[index]);
     } catch (err) {
         res.status(400).json({ message: err.message })
