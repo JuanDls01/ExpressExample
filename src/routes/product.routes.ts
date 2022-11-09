@@ -29,30 +29,42 @@ const productList: ProductList = [
     },
     {
         id: 6, name: 'Auriculares gamer', brand: 'Logitech', price: 300
+    },
+    {
+        id: 7, name: 'Teclado mecanico g304', brand: 'Logitech', price: 300
     }
 ]
 
-productRoute.get('/:currentPage', (req, res) => {
-    const { currentPage } = req.params;
-    console.log('este')
-    res.status(200).json({ products: productList.slice(Number(currentPage) * 4 - 4, Number(currentPage) * 4), pages: Math.ceil(productList.length / 4) });
-})
-
-productRoute.get('/search/info', (req, res) => {
-    const { name, brand, price } = req.query;
+productRoute.get('/:prodPerPage/:currentPage', (req, res) => {
+    const { prodPerPage, currentPage } = req.params as { currentPage: string, prodPerPage: string };
+    const { name, brand, price } = req.query as { name?: string, brand?: string, price?: number };
+    // let currentPage = query?.currentPage ? query.currentPage : 1
+    // let prodPerPage = query?.prodPerPage ? query.prodPerPage : 5
     try {
-        if (!name && !brand && !price) throw new Error('Por favor provea alguna información para buscar')
-        let productsFinded: ProductList;
+
+        let products: ProductList;
+
         if (name) {
-            productsFinded = filterByName(name.toString(), productList)
+            products = filterByName(name.toString(), productList)
         } else if (brand) {
-            productsFinded = filterByBrand(brand.toString(), productList)
+            products = filterByBrand(brand.toString(), productList)
+        } else if (price) {
+            products = filterByPrice(Number(price), productList)
         } else {
-            productsFinded = filterByPrice(Number(price), productList)
+            products = productList
         }
 
-        if (productsFinded.length === 0) throw new Error('No se encontraron productos')
-        return res.status(200).json(productsFinded)
+        const productsPaginated = products.slice(Number(currentPage) * Number(prodPerPage) - Number(prodPerPage), Number(currentPage) * Number(prodPerPage))
+
+        if (productsPaginated.length === 0) throw new Error('No se encontraron productos')
+
+        const numberOfPages = Math.ceil(products.length / Number(prodPerPage))
+
+        let pages: number[] = []
+        for (let i = 1; i <= numberOfPages; i++) {
+            pages.push(i)
+        }
+        res.status(200).json({ products: productsPaginated, pages: pages, totalProducts: productList.length });
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
@@ -70,18 +82,16 @@ productRoute.post('/', (req, res) => {
 })
 
 productRoute.put('/', (req, res) => {
-    const { id, name, brand, price } = req.body;
+    const { id, name, brand, price } = req.body as { id: number, name: string, brand: string, price: number };
     try {
         if (!name && !brand && !price) throw new Error("Por favor provea algún parametro para modificar");
         const index = productList.findIndex((product) => product.id === id);
         if (index === -1) throw new Error("El producto suministrado no ha sido encontrado");
 
-        if (brand) {
-            productList[index].brand = brand;
-        }
-        if (name) {
-            productList[index].name = name;
-        }
+        if (name) productList[index].name = name;
+        if (brand) productList[index].brand = brand;
+        if (price) productList[index].price = price;
+
         res.status(200).json(productList[index]);
     } catch (err) {
         res.status(400).json({ message: err.message })
